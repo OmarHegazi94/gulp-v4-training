@@ -5,6 +5,9 @@ const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
+const cleancss = require('gulp-clean-css');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
 
 
 // Assets
@@ -19,16 +22,29 @@ const rename = require('gulp-rename');
 
 
 
-// Compile LESS to CSS
+// Compile LESS to CSS + Adding css prefixes
 gulp.task('compile-less', async () => {
+
+    const plugins = [
+        autoprefixer({ overrideBrowserslist: ['last 2 versions'] })
+    ];
+
     return gulp.src('./style/css/*.less')
     .pipe( less({
         paths: [path.join(__dirname, 'less', 'includes')]
     }))
+    .pipe(postcss(plugins))
     .pipe(gulp.dest('dist/assets/css'));
 });
 
 // Minify all css
+gulp.task('minify-css', async () => {
+    return gulp.src('./style/css/*.css')
+    .pipe(cleancss({ compatibility: 'ie8' }))
+    .pipe(gulp.dest('./dist/assets/css'));
+});
+
+
 
 
 // Compile all ES6 to ES5
