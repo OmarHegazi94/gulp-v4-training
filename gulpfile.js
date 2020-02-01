@@ -6,8 +6,10 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const cleancss = require('gulp-clean-css');
-const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
+
+const postcss = require('gulp-postcss');
+const uncss = require('gulp-uncss');
 
 
 // Assets
@@ -22,25 +24,36 @@ const autoprefixer = require('autoprefixer');
 
 
 
+// Compile all Less files into the same folder then add prefixes to them
+// Then Concat and minify all of these files into the dist folder
+
 // Compile LESS to CSS + Adding css prefixes
+
 gulp.task('compile-less', async () => {
 
     const plugins = [
-        autoprefixer({ overrideBrowserslist: ['last 2 versions'] })
+        // uncss({
+        //     html: ['*.html']
+        // }),
+        autoprefixer({ overrideBrowserslist: ['last 2 versions'] }),
     ];
 
     return gulp.src('./style/css/*.less')
     .pipe( less({
         paths: [path.join(__dirname, 'less', 'includes')]
     }))
+    .pipe(uncss({
+        html: ['*.html']
+    }))
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('dist/assets/css'));
+    .pipe(gulp.dest('./style/css/'));
 });
 
-// Minify all css
+// Minify + Concat all css
 gulp.task('minify-css', async () => {
     return gulp.src('./style/css/*.css')
     .pipe(cleancss({ compatibility: 'ie8' }))
+    .pipe(concat('styles.min.css'))
     .pipe(gulp.dest('./dist/assets/css'));
 });
 
@@ -67,13 +80,12 @@ gulp.task('concat-js', async () => {
 });
 
 
-// Rename all css
+
 // Minify all images 
 // See how to Minify fonts
 // Copy all html files into dist folder
 // Minify all html files
 
-// Copy all of these results to new dist folder
 
 
 // See how to make a local dev server and watch for changes
