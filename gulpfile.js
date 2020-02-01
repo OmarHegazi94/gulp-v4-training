@@ -12,6 +12,10 @@ const postcss = require('gulp-postcss');
 const uncss = require('gulp-uncss');
 
 const imgmin = require('gulp-imagemin');
+const htmlmin = require('gulp-htmlmin');
+
+
+// Project structure must match in development and in production
 
 // Assets
 
@@ -30,7 +34,7 @@ const imgmin = require('gulp-imagemin');
 
 // Compile LESS to CSS + Adding css prefixes
 
-gulp.task('compile-less', async () => {
+gulp.task('compile-less', function() {
 
     const plugins = [
         // uncss({
@@ -39,7 +43,7 @@ gulp.task('compile-less', async () => {
         autoprefixer({ overrideBrowserslist: ['last 2 versions'] }),
     ];
 
-    return gulp.src('./style/css/*.less')
+    return gulp.src('./assets/css/*.less')
     .pipe( less({
         paths: [path.join(__dirname, 'less', 'includes')]
     }))
@@ -47,17 +51,16 @@ gulp.task('compile-less', async () => {
         html: ['*.html']
     }))
     .pipe(postcss(plugins))
-    .pipe(gulp.dest('./style/css/'));
+    .pipe(gulp.dest('./assets/css/'));
 });
 
 // Minify + Concat all css
-gulp.task('minify-css', async () => {
-    return gulp.src('./style/css/*.css')
+gulp.task('minify-css',  function() {
+    return gulp.src('./assets/css/*.css')
     .pipe(cleancss({ compatibility: 'ie8' }))
     .pipe(concat('styles.min.css'))
     .pipe(gulp.dest('./dist/assets/css'));
 });
-
 
 
 
@@ -72,35 +75,52 @@ gulp.task('minify-css', async () => {
 // });
 
 // Concat + Minify all js files
-gulp.task('concat-js', async () => {
-    return gulp.src('./style/js/*.js')
+gulp.task('concat-js', function() {
+    return gulp.src('./assets/js/*.js')
     .pipe(concat('scripts.min.js'))
     .pipe(uglify())
     // .pipe(rename(''))
     .pipe(gulp.dest('./dist/assets/js/'));
 });
 
+// Minify and Copy all html files
+gulp.task('minify-html', function() {
+    return gulp.src('*.html')
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest('./dist/'));
+});
+
 
 
 // Minify all images 
-gulp.task('minify-images', async () => {
-    return gulp.src(['./img/*+(.png|.jpg)'])
+gulp.task('minify-images', function() {
+    return gulp.src(['./assets/img/*+(.png|.jpg)'])
     .pipe(imgmin())
     .pipe(gulp.dest('./dist/assets/img'));
 });
 
 // Copy all icons into the new img folder
-gulp.task('copy-icons', async () => {
-    return gulp.src('./img/icons/*')
+// gulp.task('copy-icons', function() {
+//     return gulp.src('./img/icons/*')
+//     .pipe(gulp.dest('./dist/assets/img/icons'));
+// });
+
+
+// Another way of writing the task
+const copyIcons = async () => { 
+    return gulp.src('./assets/img/icons/*')
     .pipe(gulp.dest('./dist/assets/img/icons'));
-});
+};
 
 
 
 // See how to Minify fonts
-// Copy all html files into dist folder
-// Minify all html files
-
-
-
 // See how to make a local dev server and watch for changes
+
+
+// Build Command
+gulp.task('build', gulp.parallel(gulp.series('compile-less', 'minify-css', 'concat-js' ,'minify-html'),'minify-images', copyIcons ));
+
+
+
+module.exports = { copyIcons };
