@@ -21,7 +21,11 @@
   },
   "homepage": "https://github.com/OmarHegazi94/gulp-v4-training#readme",
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
     "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
     "gulp-less": "^4.0.1"
   }
 }
