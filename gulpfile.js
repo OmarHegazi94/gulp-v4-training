@@ -11,6 +11,7 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss');
 const uncss = require('gulp-uncss');
 
+const imgmin = require('gulp-imagemin');
 
 // Assets
 
@@ -73,7 +74,7 @@ gulp.task('minify-css', async () => {
 // Concat + Minify all js files
 gulp.task('concat-js', async () => {
     return gulp.src('./style/js/*.js')
-    .pipe(concat('all.min.js'))
+    .pipe(concat('scripts.min.js'))
     .pipe(uglify())
     // .pipe(rename(''))
     .pipe(gulp.dest('./dist/assets/js/'));
@@ -82,6 +83,20 @@ gulp.task('concat-js', async () => {
 
 
 // Minify all images 
+gulp.task('minify-images', async () => {
+    return gulp.src(['./img/*+(.png|.jpg)'])
+    .pipe(imgmin())
+    .pipe(gulp.dest('./dist/assets/img'));
+});
+
+// Copy all icons into the new img folder
+gulp.task('copy-icons', async () => {
+    return gulp.src('./img/icons/*')
+    .pipe(gulp.dest('./dist/assets/img/icons'));
+});
+
+
+
 // See how to Minify fonts
 // Copy all html files into dist folder
 // Minify all html files
