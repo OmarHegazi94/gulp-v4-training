@@ -1,0 +1,26 @@
+{
+  "name": "zawaji",
+  "version": "1.0.0",
+  "description": "modefing an old website to make it work with gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarHegazi94/gulp-v4-training.git"
+  },
+  "keywords": [
+    "website",
+    "gulp"
+  ],
+  "author": "omar hegazi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarHegazi94/gulp-v4-training/issues"
+  },
+  "homepage": "https://github.com/OmarHegazi94/gulp-v4-training#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
