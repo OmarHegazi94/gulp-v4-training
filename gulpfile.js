@@ -3,6 +3,9 @@ const path = require('path');
 const less = require('gulp-less');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
+
 
 // Assets
 
@@ -38,10 +41,12 @@ gulp.task('compile-less', async () => {
 //     .pipe(gulp.dest('./dist/assets/js/'));
 // });
 
-// Minify all js files
+// Concat + Minify all js files
 gulp.task('concat-js', async () => {
     return gulp.src('./style/js/*.js')
-    .pipe(concat('all.js'))
+    .pipe(concat('all.min.js'))
+    .pipe(uglify())
+    // .pipe(rename(''))
     .pipe(gulp.dest('./dist/assets/js/'));
 });
 
